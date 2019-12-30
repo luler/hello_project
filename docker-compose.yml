@@ -1,0 +1,20 @@
+version: "2"
+services:
+  php_nginx:
+    image: dreamplay/php_nginx
+    restart: always
+    privileged: true
+    command: /usr/sbin/init #初始化命令，该命令可以启动service、systemctl一系列服务程序
+    ports:
+      - 1314:80
+    volumes:
+      - ./config/rc.local:/etc/rc.d/rc.local
+      - ./runtime/nginx/wwwlogs:/home/wwwlogs
+      - ./code/api/hello_project:/home/wwwroot/api/hello_project
+      - ./code/web/hello_project/dist:/home/wwwroot/web/hello_project/dist
+      - ./config/nginx/nginx.conf:/usr/local/nginx/conf/nginx.conf
+      - ./config/nginx/vhost:/usr/local/nginx/conf/vhost
+      - ./config/php/php-fpm.conf:/usr/local/php/etc/php-fpm.conf
+      - ./config/php/php.ini:/usr/local/php/etc/php.ini
+      - ./config/supervisor/supervisord.d:/etc/supervisord.d
+      - ./config/supervisor/supervisord.conf:/etc/supervisord.conf
