@@ -18,7 +18,7 @@
     "require": {
         "php": ">=7.0",
         "topthink/framework": "5.1.*",
-        "firebase/php-jwt": "^5.0",
+        "firebase/php-jwt": "^6.0",
         "topthink/think-migration": "^2.0",
         "ralouphie/mimey": "^2.1",
         "hashids/hashids": "^4.1"
