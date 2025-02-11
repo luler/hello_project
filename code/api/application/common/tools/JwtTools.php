@@ -13,6 +13,7 @@ use app\common\exception\SystemErrorException;
 use app\common\exception\UnauthorizedHttpException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use think\facade\Cache;
 use think\facade\Config;
 use think\facade\Request;
@@ -51,7 +52,7 @@ class JwtTools
     /**
      * 单例模式
      * @return JwtTools
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public static function instance()
     {
@@ -125,7 +126,7 @@ class JwtTools
                 'uid' => $uid
             ]
         ];
-        return self::$prefix . ' ' . JWT::encode($token, $key);
+        return self::$prefix . ' ' . JWT::encode($token, $key, 'HS256');
     }
 
     /**
@@ -143,12 +144,12 @@ class JwtTools
         }
         $key = $this->getKey();
         try {
-            $decoded = (array)JWT::decode($jwt, $key, ['HS256']); //HS256方式，这里要和签发的时候对应
+            $decoded = (array)JWT::decode($jwt, new Key($key, 'HS256')); //HS256方式，这里要和签发的时候对应
             $decoded = json_decode(json_encode($decoded), true);
         } catch (ExpiredException $e) { //过期处理
             JWT::$leeway = $this->getRefreshTimeOut();//解密时间留点余地，默认1周
             try {
-                $decoded = (array)JWT::decode($jwt, $key, ['HS256']); //HS256方式，这里要和签发的时候对应
+                $decoded = (array)JWT::decode($jwt, new Key($key, 'HS256')); //HS256方式，这里要和签发的时候对应
                 $decoded = json_decode(json_encode($decoded), true);
                 //重新签发有效token
                 $token = $this->IssueToken($decoded['data']['uid']);
@@ -177,7 +178,7 @@ class JwtTools
     /**
      * 获取是否刷新了token
      * @return int
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public static function getRefreshToken()
     {
@@ -196,7 +197,7 @@ class JwtTools
      * 获取当前请求的token
      * @return mixed
      * @throws UnauthorizedHttpException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public static function getCurrentToken()
     {

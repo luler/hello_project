@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "340cd50339babc08f9f83e7234329ae9",
+    "content-hash": "6c417bfb9e9b86a5769dd9fbc953424b",
     "packages": [
         {
             "name": "firebase/php-jwt",
-            "version": "v5.5.1",
+            "version": "v6.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "83b609028194aa042ea33b5af2d41a7427de80e6"
+                "reference": "4dd1e007f22a927ac77da5a3fbb067b42d3bc224"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/83b609028194aa042ea33b5af2d41a7427de80e6",
-                "reference": "83b609028194aa042ea33b5af2d41a7427de80e6",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/4dd1e007f22a927ac77da5a3fbb067b42d3bc224",
+                "reference": "4dd1e007f22a927ac77da5a3fbb067b42d3bc224",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -27,12 +27,18 @@
                 ]
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^7.1||^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=4.8 <=9"
+                "guzzlehttp/guzzle": "^6.5||^7.4",
+                "phpspec/prophecy-phpunit": "^1.1",
+                "phpunit/phpunit": "^7.5||^9.5",
+                "psr/cache": "^1.0||^2.0",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0"
             },
             "suggest": {
+                "ext-sodium": "Support EdDSA (Ed25519) signatures",
                 "paragonie/sodium_compat": "Support EdDSA (Ed25519) signatures when libsodium is not present"
             },
             "type": "library",
@@ -63,7 +69,11 @@
                 "jwt",
                 "php"
             ],
-            "time": "2021-11-08T20:18:51+00:00"
+            "support": {
+                "issues": "https://github.com/firebase/php-jwt/issues",
+                "source": "https://github.com/firebase/php-jwt/tree/v6.4.0"
+            },
+            "time": "2023-02-09T21:01:23+00:00"
         },
         {
             "name": "hashids/hashids",
@@ -193,16 +203,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v5.1.41",
+            "version": "v5.1.42",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "7137741a323a4a60cfca334507cd1812fac91bb2"
+                "reference": "ecf1a90d397d821ce2df58f7d47e798c17eba3ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/7137741a323a4a60cfca334507cd1812fac91bb2",
-                "reference": "7137741a323a4a60cfca334507cd1812fac91bb2",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/ecf1a90d397d821ce2df58f7d47e798c17eba3ad",
+                "reference": "ecf1a90d397d821ce2df58f7d47e798c17eba3ad",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -246,7 +256,11 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2021-01-11T02:51:29+00:00"
+            "support": {
+                "issues": "https://github.com/top-think/framework/issues",
+                "source": "https://github.com/top-think/framework/tree/v5.1.42"
+            },
+            "time": "2022-10-25T15:04:49+00:00"
         },
         {
             "name": "topthink/think-installer",
@@ -293,6 +307,10 @@
                     "email": "448901948@qq.com"
                 }
             ],
+            "support": {
+                "issues": "https://github.com/top-think/think-installer/issues",
+                "source": "https://github.com/top-think/think-installer/tree/v2.0.5"
+            },
             "time": "2021-01-14T12:12:14+00:00"
         },
         {
@@ -320,13 +338,13 @@
             },
             "type": "library",
             "autoload": {
+                "files": [
+                    "src/config.php"
+                ],
                 "psr-4": {
                     "Phinx\\": "phinx/src/Phinx",
                     "think\\migration\\": "src"
-                },
-                "files": [
-                    "src/config.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -338,6 +356,10 @@
                     "email": "448901948@qq.com"
                 }
             ],
+            "support": {
+                "issues": "https://github.com/top-think/think-migration/issues",
+                "source": "https://github.com/top-think/think-migration/tree/2.0"
+            },
             "time": "2017-12-31T16:32:22+00:00"
         }
     ],
@@ -350,5 +372,6 @@
     "platform": {
         "php": ">=7.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
 }
