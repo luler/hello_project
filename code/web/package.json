@@ -131,6 +131,12 @@
   "optionalDependencies": {
     "puppeteer": "^1.12.1"
   },
+  "resolutions": {
+    "**/umi/**/jsdom": "22.1.0",
+    "cheerio": "^0.22.0",
+    "commander": "^10.0.0",
+    "glob": "^7.2.3"
+  },
   "engines": {
     "node": ">=10.0.0"
   },
