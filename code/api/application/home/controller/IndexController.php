@@ -28,7 +28,7 @@ class IndexController extends BaseController
      * 上传项目
      * @param Request $request
      * @throws CommonException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function uploadProject(Request $request)
     {
@@ -109,12 +109,20 @@ class IndexController extends BaseController
                 for ($i = 0; $i < $docnum; $i++) {
                     $statInfo = $zip->statIndex($i, \ZipArchive::FL_ENC_RAW);
                     $filename = transcoding($statInfo['name']);
+                    $targetPath = $dir . '/' . $filename;
                     if ($statInfo['crc'] == 0) {
                         //新建目录
-                        if (!is_dir($dir . '/' . substr($filename, 0, -1))) mkdir($dir . '/' . substr($filename, 0, -1), 0775, true);
+                        if (!is_dir($targetPath)) {
+                            mkdir($targetPath, 0755, true);
+                        }
                     } else {
+                        //确保父目录存在
+                        $parentDir = dirname($targetPath);
+                        if (!is_dir($parentDir)) {
+                            mkdir($parentDir, 0775, true);
+                        }
                         //拷贝文件
-                        copy('zip://' . $zip_file . '#' . $zip->getNameIndex($i), $dir . '/' . $filename);
+                        copy('zip://' . $zip_file . '#' . $zip->getNameIndex($i), $targetPath);
                     }
                 }
                 $zip->close();
@@ -159,7 +167,7 @@ class IndexController extends BaseController
      * 获取项目历史版本
      * @return \think\response\Json|\think\response\Jsonp
      * @throws CommonException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function getProjectVersionList()
     {
@@ -197,7 +205,7 @@ class IndexController extends BaseController
     /**
      * 下载上传文件
      * @return \think\response\Download|void
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function downloadZipFile()
     {
@@ -220,7 +228,7 @@ class IndexController extends BaseController
      * 获取项目列表
      * @param Request $request
      * @return \think\response\Json|\think\response\Jsonp
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function getH5List(Request $request)
     {
@@ -249,7 +257,7 @@ class IndexController extends BaseController
      * 添加项目
      * @param Request $request
      * @return \think\response\Json|\think\response\Jsonp
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function addH5List(Request $request)
     {
@@ -279,7 +287,7 @@ class IndexController extends BaseController
      * @throws CommonException
      * @throws \think\Exception
      * @throws \think\exception\PDOException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function delProjectVersion(Request $request)
     {
@@ -313,7 +321,7 @@ class IndexController extends BaseController
      * @throws \think\db\exception\ModelNotFoundException
      * @throws \think\exception\DbException
      * @throws \think\exception\PDOException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function delProject(Request $request)
     {
@@ -345,7 +353,7 @@ class IndexController extends BaseController
      * 获取固定访问链接
      * @param Request $request
      * @return \think\response\Json|\think\response\Jsonp
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function getFixedLink(Request $request)
     {
@@ -369,7 +377,7 @@ class IndexController extends BaseController
      * @param Request $request
      * @return \think\response\Json|\think\response\Jsonp
      * @throws CommonException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function editH5List(Request $request)
     {
@@ -407,7 +415,7 @@ class IndexController extends BaseController
      * @param Request $request
      * @return \think\response\Json|\think\response\Jsonp
      * @throws CommonException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function getUserList(Request $request)
     {
@@ -438,7 +446,7 @@ class IndexController extends BaseController
      * @param Request $request
      * @return \think\response\Json|\think\response\Jsonp
      * @throws CommonException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function addUser(Request $request)
     {
@@ -464,7 +472,7 @@ class IndexController extends BaseController
      * @param Request $request
      * @return \think\response\Json|\think\response\Jsonp
      * @throws CommonException
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function editUser(Request $request)
     {
@@ -495,7 +503,7 @@ class IndexController extends BaseController
 
     /**
      * 项目资源统一展示页面
-     * @author 我只想看看蓝天 
+     * @author 我只想看看蓝天
      */
     public function show()
     {
