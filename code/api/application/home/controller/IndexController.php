@@ -162,8 +162,9 @@ class IndexController extends BaseController
                 $project->save();
                 Db::commit();
                 if ($docnum <= 1000) {
+                    $id = $this->hashids->encode($data['id'], 1);
                     return $this->successResponse('提交成功', [
-                        'url' => \request()->domain() . $data['url'],
+                        'url' => \request()->domain() . '/api/show/' . $id . '/index.html',
                     ]);
                 }
             } catch (\Exception $e) {
