@@ -43,6 +43,11 @@ class JwtTools
     public static $header = 'authorization';
 
     /**
+     * @var JwtTools
+     */
+    private static $instance;
+
+    /**
      * JwtTools constructor.
      */
     public function __construct()

@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, Col, Divider, Form, Input, Modal, Popover, Row, Table } from 'antd';
+import {
+  Breadcrumb,
+  Button,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Popover,
+  Row,
+  Table,
+} from 'antd';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { request_post } from '@/utils/request_tool';
@@ -153,11 +165,30 @@ class Index extends Component {
 
   render() {
     const columns = [
-      // {
-      //   title: 'Id',
-      //   dataIndex: 'id',
-      //   key: 'id',
-      // },
+      {
+        title: '项目标识',
+        dataIndex: 'code',
+        key: 'code',
+        render: (value, record) => (
+          <span>
+            {value}
+            <Popconfirm
+              title="确定要刷新项目标识吗？"
+              onConfirm={() => {
+                request_post('/api/refreshProjectCode', { id: record.id }).then(res => {
+                  if (res.code === 200) {
+                    this.fetch(this.state.params);
+                  }
+                });
+              }}
+              okText="确定"
+              cancelText="取消"
+            >
+              <a style={{ marginLeft: 2 }}>🔄</a>
+            </Popconfirm>
+          </span>
+        ),
+      },
       {
         title: '项目名称',
         dataIndex: 'title',

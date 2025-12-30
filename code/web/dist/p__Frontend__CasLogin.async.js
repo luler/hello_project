@@ -1,1 +1,73 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([[5],{"CH7+":function(e,t,n){"use strict";n.r(t),n.d(t,"default",function(){return m});n("T2oS");var r=n("W9HT"),c=n("2Taf"),o=n.n(c),i=n("vZ4D"),u=n.n(i),a=n("MhPg"),f=n.n(a),s=n("l4Ni"),l=n.n(s),p=n("ujKo"),b=n.n(p),d=n("q1tI"),v=n.n(d),h=n("+n12"),j=n("34ay"),O=n("HZnN");function y(e){var t=w();return function(){var n,r=b()(e);if(t){var c=b()(this).constructor;n=Reflect.construct(r,arguments,c)}else n=r.apply(this,arguments);return l()(this,n)}}function w(){if("undefined"===typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"===typeof Proxy)return!0;try{return Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],function(){})),!0}catch(e){return!1}}var m=function(e){f()(n,e);var t=y(n);function n(){var e;o()(this,n),e=t.call(this);var r=JSON.parse(Object(h["b"])("user_info"));return Object(j["j"])(r,Object(h["b"])("expires_in")),1===r.is_super_admin?Object(j["i"])(["super_admin"]):Object(j["i"])(["admin"]),Object(O["b"])(),Object(j["h"])(Object(h["b"])("access_token").replace("+"," ")),window.location.href="/",e}return u()(n,[{key:"render",value:function(){return v.a.createElement("div",{style:{textAlign:"center"}},v.a.createElement(r["a"],null))}}]),n}(d["Component"])}}]);
+(window['webpackJsonp'] = window['webpackJsonp'] || []).push([
+  [5],
+  {
+    'CH7+': function(n, e, t) {
+      'use strict';
+      t.r(e),
+        t.d(e, 'default', function() {
+          return y;
+        });
+      t('T2oS');
+      var r = t('W9HT'),
+        c = t('2Taf'),
+        o = t.n(c),
+        a = t('vZ4D'),
+        u = t.n(a),
+        i = t('l4Ni'),
+        l = t.n(i),
+        s = t('ujKo'),
+        f = t.n(s),
+        p = t('MhPg'),
+        b = t.n(p),
+        d = t('q1tI'),
+        j = t.n(d),
+        O = t('+n12'),
+        v = t('34ay'),
+        w = t('HZnN');
+      function h(n, e, t) {
+        return (
+          (e = f()(e)),
+          l()(n, m() ? Reflect.construct(e, t || [], f()(n).constructor) : e.apply(n, t))
+        );
+      }
+      function m() {
+        try {
+          var n = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
+        } catch (n) {}
+        return (m = function() {
+          return !!n;
+        })();
+      }
+      var y = (function(n) {
+        function e() {
+          var n;
+          o()(this, e), (n = h(this, e));
+          var t = JSON.parse(Object(O['b'])('user_info'));
+          return (
+            Object(v['j'])(t, Object(O['b'])('expires_in')),
+            1 === t.is_super_admin ? Object(v['i'])(['super_admin']) : Object(v['i'])(['admin']),
+            Object(w['b'])(),
+            Object(v['h'])(Object(O['b'])('access_token').replace('+', ' ')),
+            (window.location.href = '/'),
+            n
+          );
+        }
+        return (
+          b()(e, n),
+          u()(e, [
+            {
+              key: 'render',
+              value: function() {
+                return j.a.createElement(
+                  'div',
+                  { style: { textAlign: 'center' } },
+                  j.a.createElement(r['a'], null)
+                );
+              },
+            },
+          ])
+        );
+      })(d['Component']);
+    },
+  },
+]);

@@ -16,6 +16,8 @@ Route::group('api', function () {
     Route::any('show', 'home/Index/show');
     Route::any('downloadZipFile', 'home/Index/downloadZipFile');
     Route::any('casLogin', 'home/Login/casLogin');
+    //直接上传项目代码
+    Route::post('uploadProjectDirect', 'home/Index/uploadProject');
     //需要登录的路由
     Route::group('', function () {
         // +----------------------------------------------------------------------
@@ -25,6 +27,7 @@ Route::group('api', function () {
         Route::post('uploadProject', 'home/Index/uploadProject');
         Route::get('getH5List', 'home/Index/getH5List');
         Route::post('addH5List', 'home/Index/addH5List');
+        Route::post('refreshProjectCode', 'home/Index/refreshProjectCode');
         Route::get('getProjectVersionList', 'home/Index/getProjectVersionList');
         Route::post('delProjectVersion', 'home/Index/delProjectVersion');
         Route::post('delProject', 'home/Index/delProject');

@@ -32,15 +32,24 @@ class IndexController extends BaseController
      */
     public function uploadProject(Request $request)
     {
-        $filed = ['project_id'];
+        $filed = ['project_id', 'code',];
         $param = \request()->only($filed);
-        checkData($param, [
-            'project_id|项目id' => 'require|integer'
-        ]);
-        if (!($project = Project::find($param['project_id']))) {
+        if (is_login()) {
+            checkData($param, [
+                'project_id|项目id' => 'require|integer'
+            ]);
+            $project = Project::find($param['project_id']);
+        } else {
+            checkData($param, [
+                'code|项目标识' => 'require'
+            ]);
+            $project = Project::where('code', $param['code'])->find();
+        }
+
+        if (!$project) {
             throw new CommonException('项目不存在');
         }
-        if (!User::isSuperAdmin()) {
+        if (is_login() && !User::isSuperAdmin()) {
             if ($project['uid'] != is_login()) {
                 throw new CommonException('项目无权限');
             }
@@ -52,8 +61,8 @@ class IndexController extends BaseController
         }
 
         $info = $file->validate([
-            'size' => 1024 * 1024 * 1024, //1024M
-            'ext' => 'zip'
+            'size' => 1024 * 1024 * 128, //128M
+            'ext' => 'zip',
         ])->check();
         if (!$info) {
             throw new CommonException($file->getError());
@@ -62,7 +71,7 @@ class IndexController extends BaseController
 
         $path = '/backend/uploads/' . date('Ymd') . '/' . uniqid();
         $dir = app()->getRootPath() . 'public' . $path;
-        $fixed_path = '/backend/fixed/' . $param['project_id'] . '/' . md5($param['project_id'] . 'hello_project');
+        $fixed_path = '/backend/fixed/' . $project['id'] . '/' . md5($project['id'] . 'hello_project');
         $fixed_dir = app()->getRootPath() . 'public' . $fixed_path;
         if (!is_dir($dir)) {
             mkdir($dir, 0755, true);
@@ -79,12 +88,12 @@ class IndexController extends BaseController
             copy($zip_file, $zip_file_path);
 
             $data = [];
-            $data['uid'] = is_login();
+            $data['uid'] = is_login() ? is_login() : $project['uid'];
             $data['zip_file_url'] = strstr($zip_file_path, '/backend/');
             $data['url'] = '';
             $data['path'] = $dir;
             $data['file_name'] = '压缩包文件数量超过1000，文件解压未完成，已放到后台处理，请稍等10分钟，10分钟未处理完，证明该文件存在问题导致异常失效，需重新上传...';
-            $data['project_id'] = $param['project_id'];
+            $data['project_id'] = $project['id'];
             $projectVersion = ProjectVersion::create($data);
             if (empty($projectVersion->id)) {
                 throw new CommonException('数据库操作出错');
@@ -93,9 +102,11 @@ class IndexController extends BaseController
             $docnum = $zip->numFiles;
             if ($docnum > 1000) { //防止处理超时
                 $return = [
-                    'message' => '提交成功',
+                    'message' => '提交成功，但' . $data['file_name'],
                     'code' => 200,
-                    'info' => $info
+                    'info' => [
+                        'url' => '',
+                    ],
                 ];
                 http_response_code($return['code']);
                 header('Content-Type:application/json; charset=utf-8');
@@ -151,7 +162,9 @@ class IndexController extends BaseController
                 $project->save();
                 Db::commit();
                 if ($docnum <= 1000) {
-                    return $this->successResponse('提交成功');
+                    return $this->successResponse('提交成功', [
+                        'url' => \request()->domain() . $data['url'],
+                    ]);
                 }
             } catch (\Exception $e) {
                 deletedir($dir);
@@ -247,7 +260,7 @@ class IndexController extends BaseController
             ->where($where)
             ->order('a.id', 'desc')
             ->autoPage()
-            ->field('a.id,a.title,a.desc,a.auth_code,b.appid,a.create_time')
+            ->field('a.id,a.title,a.code,a.desc,a.auth_code,b.appid,a.create_time')
             ->get();
 
         return $this->successResponse('获取成功', $res);
@@ -276,8 +289,38 @@ class IndexController extends BaseController
         }
 
         $param['uid'] = is_login();
+        $param['code'] = bin2hex(random_bytes(5));
         Project::create($param);
         return $this->successResponse('添加成功');
+    }
+
+    /**
+     * 刷新项目标识
+     * @param Request $request
+     * @return \think\response\Json|\think\response\Jsonp
+     * @throws CommonException
+     * @throws \Random\RandomException
+     */
+    public function refreshProjectCode(Request $request)
+    {
+        $fields = ['id',];
+        $param = $request->only($fields);
+        checkData($param, [
+            'id|项目id' => 'require|integer',
+        ]);
+
+        $project = Project::find($param['id']);
+        if (empty($project)) {
+            throw new CommonException('项目不存在');
+        }
+
+        if (!User::isSuperAdmin() && $project['uid'] != is_login()) {
+            throw new CommonException('项目无权限');
+        }
+
+        $param['code'] = bin2hex(random_bytes(5));
+        Project::update($param);
+        return $this->successResponse('刷新成功');
     }
 
     /**
