@@ -335,21 +335,23 @@ class IndexController extends BaseController
      */
     public function delProjectVersion(Request $request)
     {
-        $fields = ['project_version_id'];
+        $fields = ['project_version_ids'];
         $param = $request->only($fields);
         checkData($param, [
-            'project_version_id|项目版本id' => 'require|integer',
+            'project_version_ids|项目版本id' => 'require|array',
         ]);
 
-        $project_version = ProjectVersion::find($param['project_version_id']);
-        if (empty($project_version)) {
+        $where = [];
+        $where[] = ['id', 'in', $param['project_version_ids']];
+        if (!User::isSuperAdmin()) {
+            $where[] = ['uid', '=', is_login()];
+        }
+
+        $project_ids = ProjectVersion::where($where)->column('id');
+        if (count($project_ids) != count($param['project_version_ids'])) {
             throw new CommonException('项目版本不存在');
         }
-        $where = [];
-        $where[] = ['id', '=', $param['project_version_id']];
-        if (!User::isSuperAdmin() && $project_version['uid'] != is_login()) {
-            throw new CommonException('项目版本无权限');
-        }
+
         ProjectVersion::where($where)->delete();
         ProjectVersion::delNotUseDir();
         return $this->successResponse('删除成功');

@@ -4,6 +4,7 @@ import {
   Button,
   Col,
   Input,
+  message,
   Modal,
   Popconfirm,
   Row,
@@ -32,6 +33,7 @@ class Index extends Component {
     visible: false,
     del_project_version_id: 0,
     fixed_link: '',
+    selectedRowKeys: [],
   };
 
   componentDidMount() {
@@ -99,6 +101,37 @@ class Index extends Component {
     });
   };
 
+  handleDeleteSelected = e => {
+    e.stopPropagation(); // 防止触发上传
+    const { selectedRowKeys } = this.state;
+    if (selectedRowKeys.length === 0) {
+      Modal.warning({
+        title: '提示',
+        content: '请先选择要删除的项目',
+        okText: '确定',
+      });
+      return;
+    }
+
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除选中的 ${selectedRowKeys.length} 个项目吗?`,
+      okText: '确定',
+      cancelText: '取消',
+      onOk: () => {
+        request_post('/api/delProjectVersion', {
+          project_version_ids: selectedRowKeys,
+        }).then(res => {
+          if (res.code === 200) {
+            message.success(res.message);
+            this.setState({ selectedRowKeys: [] });
+            this.fetch(this.state.params);
+          }
+        });
+      },
+    });
+  };
+
   render() {
     const columns = [
       {
@@ -143,9 +176,10 @@ class Index extends Component {
             <Popconfirm
               title="您确定要删除吗？"
               onConfirm={() => {
-                request_post('/api/delProjectVersion', { project_version_id: record.id }).then(
+                request_post('/api/delProjectVersion', { project_version_ids: [record.id] }).then(
                   res => {
                     if (res.code === 200) {
+                      message.success(res.message);
                       this.fetch(this.state.params);
                     }
                   }
@@ -239,7 +273,11 @@ class Index extends Component {
                       上传
                     </Button>
                   </Tooltip>
-                  &nbsp; &nbsp; &nbsp;
+                  &nbsp;&nbsp;
+                  <Button onClick={this.handleDeleteSelected} type="danger">
+                    删除选中
+                  </Button>
+                  &nbsp;&nbsp;
                   <Tooltip
                     placement="top"
                     title="此链接为本项目的固定链接，且始终访问项目最新版本内容"
@@ -275,6 +313,12 @@ class Index extends Component {
             columns={columns}
             loading={_loading}
             onChange={this.handleTableChange}
+            rowSelection={{
+              selectedRowKeys: this.state.selectedRowKeys,
+              onChange: selectedRowKeys => {
+                this.setState({ selectedRowKeys });
+              },
+            }}
           />
         </div>
       </div>
